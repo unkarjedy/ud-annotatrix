@@ -264,12 +264,14 @@ function removeCurSent() {
 
 
 function loadDataInIndex() {
+    console.log('loadDataInIndex: START');
     RESULTS = [];
     AVAILABLESENTENCES = 0;
     CURRENTSENTENCE = 0;
 
     var corpus = localStorage.getItem('corpus');
     var splitted = splitIntoSentences(corpus);
+    console.log('loadDataInIndex: sentences: ' + splitted.length);
     localStorage.setItem('treebank', JSON.stringify(splitted));
     RESULTS = splitted; // TODO: get rid of RESULTS
 
@@ -281,18 +283,20 @@ function loadDataInIndex() {
     }
 
     showDataIndiv();
+    console.log('loadDataInIndex: END');
 }
 
 
 function splitIntoSentences(corpus) {
     /* Takes a string with the corpus and returns an array of sentences. */
     var format = detectFormat(corpus);
+    console.log('splitIntoSentences: detected format: ' + format)
 
     // splitting
     if (format == "plain text") {
         var splitted = corpus.match(/[^ ].+?[.!?](?=( |$))/g);
     } else {
-        var splitted = corpus.split("\n\n");
+        var splitted = corpus.split(/(\r\n|\n){2,2}/);
     }
 
     // removing empty lines
